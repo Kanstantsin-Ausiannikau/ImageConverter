@@ -1,0 +1,9 @@
+C:\projects\ImageConverter\bin\Debug\ImageConverter.exe.config
+C:\projects\ImageConverter\bin\Debug\ImageConverter.exe
+C:\projects\ImageConverter\bin\Debug\ImageConverter.pdb
+C:\projects\ImageConverter\obj\Debug\ImageConverter.csprojResolveAssemblyReference.cache
+C:\projects\ImageConverter\obj\Debug\ImageConverter.MainForm.resources
+C:\projects\ImageConverter\obj\Debug\ImageConverter.Properties.Resources.resources
+C:\projects\ImageConverter\obj\Debug\ImageConverter.csproj.GenerateResource.Cache
+C:\projects\ImageConverter\obj\Debug\ImageConverter.exe
+C:\projects\ImageConverter\obj\Debug\ImageConverter.pdb
