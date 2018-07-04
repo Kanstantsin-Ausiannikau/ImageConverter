@@ -25,7 +25,7 @@ namespace ImageConverter
         {
             if (ofpLoad.ShowDialog()==DialogResult.OK)
             {
-                images = new ImageCollection(ofpLoad.FileNames);
+                images = new ImageCollection(ofpLoad.FileNames, @"d:\temp\water.png", 400, 400);
 
                 dgvPaths.ColumnCount = 1;
                 dgvPaths.Columns[0].Name = "Файлы";
@@ -43,7 +43,8 @@ namespace ImageConverter
 
         private void dgvPaths_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            pbImage.Image = Image.FromFile((string)dgvPaths.Rows[e.RowIndex].Cells[1].Value);
+            //pbImage.Image = Image.FromFile((string)dgvPaths.Rows[e.RowIndex].Cells[1].Value);
+            pbImage.Image = images[e.RowIndex];
         }
     }
 }
