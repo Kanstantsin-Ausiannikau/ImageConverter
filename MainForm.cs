@@ -44,7 +44,9 @@ namespace ImageConverter
         private void dgvPaths_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             //pbImage.Image = Image.FromFile((string)dgvPaths.Rows[e.RowIndex].Cells[1].Value);
-            pbImage.Image = images[e.RowIndex];
+            Image previewImage = Converter.GetWatermarkedImage(images[e.RowIndex], int.Parse(txtWidth.Text), int.Parse(txtNewHeight.Text), new Bitmap(@"c:\Projects\ImageConverter\Samples\water.png"));
+
+            pbImage.Image = previewImage;
         }
     }
 }

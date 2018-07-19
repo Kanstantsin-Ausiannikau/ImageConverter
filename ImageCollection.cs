@@ -13,8 +13,8 @@ namespace ImageConverter
     {
         string[] _origFilePaths;
         string _waterMarksPath;
-        int _vertical;
-        int _horisontal;
+        int _verticalOriginalSize;
+        int _horisontalOriginalSize;
 
         public ImageCollection(string[] files, string waterMarksPath, int vertical, int horisontal)
         {
@@ -25,8 +25,8 @@ namespace ImageConverter
 
             _origFilePaths = files;
             _waterMarksPath = waterMarksPath;
-            _vertical = vertical;
-            _horisontal = horisontal;
+            _verticalOriginalSize = vertical;
+            _horisontalOriginalSize = horisontal;
         }
 
         public string[] GetPaths()
@@ -43,18 +43,18 @@ namespace ImageConverter
         {
             get
             {
-                Bitmap source1 = new Bitmap(_origFilePaths[index]); // your source images - assuming they're the same size
-                Bitmap source2 = new Bitmap(_waterMarksPath);
-                var target = new Bitmap(source1.Width, source1.Height, PixelFormat.Format32bppArgb);
-                var graphics = Graphics.FromImage(target);
-                graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                return new Bitmap(_origFilePaths[index]); // your source images - assuming they're the same size
+                //Bitmap source2 = new Bitmap(_waterMarksPath);
+                //var target = new Bitmap(source1.Width, source1.Height, PixelFormat.Format32bppArgb);
+                //var graphics = Graphics.FromImage(target);
+                //graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
 
-                graphics.DrawImage(source1, 0, 0);
-                graphics.DrawImage(source2, 0, 0);
+                //graphics.DrawImage(source1, 0, 0);
+                //graphics.DrawImage(source2, 0, 0);
 
-                target.Save("filename.png", ImageFormat.Jpeg);
+                //target.Save("filename.png", ImageFormat.Jpeg);
 
-                return target;
+                //return target;
             }
         }
     }
