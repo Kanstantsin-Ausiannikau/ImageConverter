@@ -143,7 +143,7 @@ namespace ImageConverter
                 
             }
 
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
