@@ -34,6 +34,8 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dgvPaths = new System.Windows.Forms.DataGridView();
             this.pbImage = new System.Windows.Forms.PictureBox();
+            this.btnSetting = new System.Windows.Forms.Button();
+            this.btnUpload = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.txtWidth = new System.Windows.Forms.TextBox();
             this.txtNewHeight = new System.Windows.Forms.TextBox();
@@ -41,8 +43,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnLoad = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.btnUpload = new System.Windows.Forms.Button();
-            this.btnSetting = new System.Windows.Forms.Button();
+            this.btnLoadExcel = new System.Windows.Forms.Button();
+            this.ofdLoadFromExcel = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -82,6 +84,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.btnLoadExcel);
             this.splitContainer1.Panel2.Controls.Add(this.btnSetting);
             this.splitContainer1.Panel2.Controls.Add(this.btnUpload);
             this.splitContainer1.Panel2.Controls.Add(this.btnSave);
@@ -131,9 +134,29 @@
             this.pbImage.TabIndex = 0;
             this.pbImage.TabStop = false;
             // 
+            // btnSetting
+            // 
+            this.btnSetting.Location = new System.Drawing.Point(428, 39);
+            this.btnSetting.Name = "btnSetting";
+            this.btnSetting.Size = new System.Drawing.Size(75, 23);
+            this.btnSetting.TabIndex = 7;
+            this.btnSetting.Text = "Настройки";
+            this.btnSetting.UseVisualStyleBackColor = true;
+            this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
+            // 
+            // btnUpload
+            // 
+            this.btnUpload.Location = new System.Drawing.Point(404, 10);
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.Size = new System.Drawing.Size(99, 23);
+            this.btnUpload.TabIndex = 6;
+            this.btnUpload.Text = "Загрузить на ftp";
+            this.btnUpload.UseVisualStyleBackColor = true;
+            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(273, 10);
+            this.btnSave.Location = new System.Drawing.Point(305, 10);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(93, 23);
             this.btnSave.TabIndex = 5;
@@ -143,7 +166,7 @@
             // 
             // txtWidth
             // 
-            this.txtWidth.Location = new System.Drawing.Point(150, 42);
+            this.txtWidth.Location = new System.Drawing.Point(182, 42);
             this.txtWidth.Name = "txtWidth";
             this.txtWidth.Size = new System.Drawing.Size(100, 20);
             this.txtWidth.TabIndex = 4;
@@ -151,7 +174,7 @@
             // 
             // txtNewHeight
             // 
-            this.txtNewHeight.Location = new System.Drawing.Point(150, 12);
+            this.txtNewHeight.Location = new System.Drawing.Point(182, 12);
             this.txtNewHeight.Name = "txtNewHeight";
             this.txtNewHeight.Size = new System.Drawing.Size(100, 20);
             this.txtNewHeight.TabIndex = 3;
@@ -160,7 +183,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(98, 42);
+            this.label3.Location = new System.Drawing.Point(130, 42);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 2;
@@ -169,7 +192,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(98, 12);
+            this.label2.Location = new System.Drawing.Point(130, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 1;
@@ -185,25 +208,19 @@
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
-            // btnUpload
+            // btnLoadExcel
             // 
-            this.btnUpload.Location = new System.Drawing.Point(372, 10);
-            this.btnUpload.Name = "btnUpload";
-            this.btnUpload.Size = new System.Drawing.Size(99, 23);
-            this.btnUpload.TabIndex = 6;
-            this.btnUpload.Text = "Загрузить на ftp";
-            this.btnUpload.UseVisualStyleBackColor = true;
-            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            this.btnLoadExcel.Location = new System.Drawing.Point(3, 42);
+            this.btnLoadExcel.Name = "btnLoadExcel";
+            this.btnLoadExcel.Size = new System.Drawing.Size(121, 23);
+            this.btnLoadExcel.TabIndex = 8;
+            this.btnLoadExcel.Text = "Загрузить из Excel";
+            this.btnLoadExcel.UseVisualStyleBackColor = true;
+            this.btnLoadExcel.Click += new System.EventHandler(this.btnLoadExcel_Click);
             // 
-            // btnSetting
+            // ofdLoadFromExcel
             // 
-            this.btnSetting.Location = new System.Drawing.Point(396, 39);
-            this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(75, 23);
-            this.btnSetting.TabIndex = 7;
-            this.btnSetting.Text = "Настройки";
-            this.btnSetting.UseVisualStyleBackColor = true;
-            this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
+            this.ofdLoadFromExcel.FileName = "ExcelLoad";
             // 
             // MainForm
             // 
@@ -246,6 +263,8 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Button btnSetting;
         private System.Windows.Forms.Button btnUpload;
+        private System.Windows.Forms.Button btnLoadExcel;
+        private System.Windows.Forms.OpenFileDialog ofdLoadFromExcel;
     }
 }
 

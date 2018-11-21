@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -71,8 +72,10 @@ namespace ImageConverter
 
                 foreach (DataGridViewRow dr in dgvPaths.Rows)
                 {
-                    if ((string)dr.Cells[0].Value == "true")
+                    if (Convert.ToBoolean(dr.Cells[0].Value))
                     {
+                        
+
                         Image image  = Converter.GetWatermarkedImage(
                                 new Bitmap((string)dr.Cells[1].Value),
                                 int.Parse(txtWidth.Text),
@@ -94,12 +97,16 @@ namespace ImageConverter
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
+            List<bool> checkedList = new List<bool>();
+            List<string> linkList = new List<string>();
             foreach (DataGridViewRow dr in dgvPaths.Rows)
             {
-                if ((string)dr.Cells[0].Value == "true")
+                if (Convert.ToBoolean(dr.Cells[0].Value))
                 {
+                    checkedList.Add(true);
+
                     Bitmap image = Converter.GetWatermarkedImage(
-                            new Bitmap((string)dr.Cells[1].Value),
+                            images[dr.Cells[1].RowIndex],
                             int.Parse(txtWidth.Text),
                             int.Parse(txtNewHeight.Text),
                             new Bitmap(Environment.CurrentDirectory + @"\water.png"));
@@ -110,40 +117,162 @@ namespace ImageConverter
                         Path.GetFileName((string)dr.Cells[1].Value),
                         Properties.Settings.Default.FtpName,
                         Properties.Settings.Default.FtpPassword);
+
+                    
+
+                    if (!isSended)
+                    {
+                        MessageBox.Show("Не удалось загрузить файл " + (string)dr.Cells[1].Value);
+
+                        linkList.Add(null);
+                    }
+                    else
+                    {
+                        linkList.Add(String.Format("{0}docs/{1}", Properties.Settings.Default.FtpPath, Path.GetFileName((string)dr.Cells[1].Value)).Replace("ftp://", "http://"));
+                    }
                 }
+                else
+                {
+                    checkedList.Add(false);
+                    linkList.Add(null);
+                }
+            }
+            MessageBox.Show("Загрузка завершена");
+
+            if (MessageBox.Show("Сохранить пути к картинкам в Excel-файл?", "Сохранение в Excel", MessageBoxButtons.YesNo)==DialogResult.Yes)
+            {
+                ExcelData.SaveDataToExcel(checkedList, linkList);
             }
         }
 
         private bool SendToFtp(Bitmap image, string ftpPath, string fileName, string ftpName, string ftpPassword)
         {
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(String.Format("{0}/{1}",ftpPath, fileName));
-            request.Method = WebRequestMethods.Ftp.UploadFile;
+            if (image==null)
+            {
+                return false;
+            }
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(@String.Format("{0}/{1}",ftpPath, fileName));
+            //request.Method = WebRequestMethods.Ftp.UploadFile;
 
             request.Credentials = new NetworkCredential(ftpName, ftpPassword);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
 
-            byte[] fileContents;
-
-            Stream st = new MemoryStream();
-            image.Save(st, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-            using (StreamReader sourceStream = new StreamReader(st))
+            try
             {
-                fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                return true;
+            }
+            catch (WebException ex)
+            {
+                FtpWebRequest sendRequest = (FtpWebRequest)WebRequest.Create(@String.Format("{0}/{1}", ftpPath, fileName));
+                //request.Method = WebRequestMethods.Ftp.UploadFile;
+
+                sendRequest.Credentials = new NetworkCredential(ftpName, ftpPassword);
+                sendRequest.Method = WebRequestMethods.Ftp.UploadFile;
+
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (response.StatusCode ==
+                    FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+
+                    System.Drawing.ImageConverter converter = new System.Drawing.ImageConverter();
+
+                    byte[] fileContents;
+
+                    Stream st = new MemoryStream();
+                    image.Save(st, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+                    using (StreamReader sourceStream = new StreamReader(st))
+                    {
+                        fileContents = (byte[])converter.ConvertTo(image, typeof(byte[]));
+                    }
+
+                    sendRequest.ContentLength = fileContents.Length;
+
+                    using (Stream requestStream = sendRequest.GetRequestStream())
+                    {
+                        requestStream.Write(fileContents, 0, fileContents.Length);
+                    }
+
+                    using (FtpWebResponse response1 = (FtpWebResponse)sendRequest.GetResponse())
+                    {
+                        if (response1.StatusCode == FtpStatusCode.ClosingData)
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
 
-            request.ContentLength = fileContents.Length;
 
-            using (Stream requestStream = request.GetRequestStream())
+
+
+            //System.Drawing.ImageConverter converter = new System.Drawing.ImageConverter();
+
+            //byte[] fileContents;
+
+            //Stream st = new MemoryStream();
+            //image.Save(st, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            //using (StreamReader sourceStream = new StreamReader(st))
+            //{
+            //    fileContents = (byte[])converter.ConvertTo(image, typeof(byte[]));
+            //}
+
+            //request.ContentLength = fileContents.Length;
+
+            //using (Stream requestStream = request.GetRequestStream())
+            //{
+            //    requestStream.Write(fileContents, 0, fileContents.Length);
+            //}
+
+            //using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            //{
+            //    if (response.StatusCode==FtpStatusCode.ClosingData)
+            //    {
+            //        return true;
+            //    }
+            //}
+
+            return false;
+        }
+
+        private void btnLoadExcel_Click(object sender, EventArgs e)
+        {
+            if (ofdLoadFromExcel.ShowDialog() == DialogResult.OK)
             {
-                requestStream.Write(fileContents, 0, fileContents.Length);
-            }
+                var links = ExcelData.GetDataFromExcel(ofdLoadFromExcel.FileName);
 
-            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-            {
-                
-            }
+                if (dgvPaths.ColumnCount == 0)
+                {
+                    dgvPaths.ColumnCount = 1;
+                    dgvPaths.Columns[0].Name = "Файлы";
 
-            return true;
+
+
+                    DataGridViewCheckBoxColumn checkedImage = new DataGridViewCheckBoxColumn();
+                    dgvPaths.Columns.Insert(0, checkedImage);
+
+                    dgvPaths.Columns[1].Width = 300;
+
+                }
+
+                dgvPaths.Rows.Clear();
+
+                foreach (string item in links)
+                {
+                    string[] row = new string[] { "true", item };
+                    dgvPaths.Rows.Add(row);
+                }
+
+                if (links.Count > 0)
+                {
+                    images = new ImageCollection(links);
+                }
+
+            }
         }
     }
 }

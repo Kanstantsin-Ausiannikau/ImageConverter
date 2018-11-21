@@ -8,6 +8,11 @@ namespace ImageConverter
     {
         public static Bitmap GetWatermarkedImage(Image image,int width, int height, Image waterMark)
         {
+            if (image == null)
+            {
+                return null;
+            }
+
             Bitmap resizedImage = ResizeImage(image, width, height);
 
             Bitmap resizedWaterMark = ResizeImage(waterMark, width, height);
@@ -24,6 +29,11 @@ namespace ImageConverter
 
         private static Bitmap ResizeImage(Image image, int width, int height)
         {
+            if (image == null)
+            {
+                return null;
+            }
+
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
