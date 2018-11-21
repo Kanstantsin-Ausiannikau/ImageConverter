@@ -13,9 +13,11 @@ namespace ImageConverter
                 return null;
             }
 
-            Bitmap resizedImage = ResizeImage(image, width, height);
 
-            Bitmap resizedWaterMark = ResizeImage(waterMark, width, height);
+            Bitmap resizedWaterMark = ResizeImage(waterMark, width, height, waterMark.HorizontalResolution, waterMark.VerticalResolution);
+
+            Bitmap resizedImage = ResizeImage(image, width, height, waterMark.HorizontalResolution, waterMark.VerticalResolution);
+
 
             var target = new Bitmap(resizedImage.Width, resizedImage.Height, PixelFormat.Format32bppArgb);
             var graphics = Graphics.FromImage(target);
@@ -27,7 +29,7 @@ namespace ImageConverter
             return target;
         }
 
-        private static Bitmap ResizeImage(Image image, int width, int height)
+        private static Bitmap ResizeImage(Image image, int width, int height, float xDpi, float yDpi)
         {
             if (image == null)
             {
@@ -37,7 +39,7 @@ namespace ImageConverter
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+            destImage.SetResolution(xDpi, yDpi);
 
             float kw = (float)image.Width / width;
             float kh = (float)image.Height / height;

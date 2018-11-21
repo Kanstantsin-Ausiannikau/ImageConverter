@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -74,7 +75,18 @@ namespace ImageConverter
                 {
                     if (Convert.ToBoolean(dr.Cells[0].Value))
                     {
-                        
+                        ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
+
+                        System.Drawing.Imaging.Encoder myEncoder =
+        System.Drawing.Imaging.Encoder.Quality;
+
+                        EncoderParameters myEncoderParameters = new EncoderParameters(1);
+
+                        EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder,
+                            100L);
+
+                        myEncoderParameters.Param[0] = myEncoderParameter;
+
 
                         Image image  = Converter.GetWatermarkedImage(
                                 new Bitmap((string)dr.Cells[1].Value),
@@ -82,10 +94,23 @@ namespace ImageConverter
                                 int.Parse(txtNewHeight.Text),
                                 new Bitmap(Environment.CurrentDirectory + @"\water.png"));
 
-                        image.Save(path + @"\" + Path.GetFileName((string)dr.Cells[1].Value));
+                        image.Save(path + @"\" + Path.GetFileName((string)dr.Cells[1].Value), jgpEncoder, myEncoderParameters);
                     }
                 }
             }
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
 
         private void btnSetting_Click(object sender, EventArgs e)

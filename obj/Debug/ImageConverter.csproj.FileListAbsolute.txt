@@ -20,3 +20,14 @@ d:\projects\ImageConverter\obj\Debug\ImageConverter.Properties.Resources.resourc
 d:\projects\ImageConverter\obj\Debug\ImageConverter.csproj.GenerateResource.Cache
 d:\projects\ImageConverter\obj\Debug\ImageConverter.exe
 d:\projects\ImageConverter\obj\Debug\ImageConverter.pdb
+d:\projects\1\ImageConverter\bin\Debug\ImageConverter.exe.config
+d:\projects\1\ImageConverter\bin\Debug\ImageConverter.exe
+d:\projects\1\ImageConverter\bin\Debug\ImageConverter.pdb
+d:\projects\1\ImageConverter\bin\Debug\EPPlus.dll
+d:\projects\1\ImageConverter\obj\Debug\ImageConverter.csprojResolveAssemblyReference.cache
+d:\projects\1\ImageConverter\obj\Debug\ImageConverter.frmSettings.resources
+d:\projects\1\ImageConverter\obj\Debug\ImageConverter.MainForm.resources
+d:\projects\1\ImageConverter\obj\Debug\ImageConverter.Properties.Resources.resources
+d:\projects\1\ImageConverter\obj\Debug\ImageConverter.csproj.GenerateResource.Cache
+d:\projects\1\ImageConverter\obj\Debug\ImageConverter.exe
+d:\projects\1\ImageConverter\obj\Debug\ImageConverter.pdb
